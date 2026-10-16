@@ -6,221 +6,892 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Financial Chaos — Life Simulator</title>
 <style>
-:root{--bg:#101522;--panel:#191f30;--panel2:#20283b;--ink:#f4f6ff;--muted:#aab4ca;--lime:#c9f36a;--pink:#ff7894;--blue:#8db8ff;--gold:#ffd479;--line:#343d54}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#26334d 0,transparent 35%),var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
-.wrap{max-width:1100px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.brand{font-size:.8rem;letter-spacing:.18em;color:var(--lime);font-weight:900}.pill{border:1px solid var(--line);padding:8px 12px;border-radius:999px;color:var(--muted);font-size:.85rem}
-h1{font-size:clamp(2.3rem,6vw,4.8rem);line-height:.95;letter-spacing:-.06em;margin:22px 0 12px}h1 span{color:var(--lime)}.intro{color:var(--muted);max-width:680px;line-height:1.6}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}.stat,.card{background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:17px}.stat small{color:var(--muted);display:block;margin-bottom:8px}.stat strong{font-size:clamp(1.1rem,2.5vw,1.7rem)}.positive{color:var(--lime)}.negative{color:var(--pink)}
-.layout{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}.card h2{margin:0 0 8px;font-size:1.15rem}.sub{color:var(--muted);font-size:.9rem;line-height:1.5}.stagebar{display:grid;grid-template-columns:repeat(9,1fr);gap:6px;margin:18px 0}.stage{height:8px;border-radius:99px;background:#343d54}.stage.done{background:var(--lime)}.stage.now{background:var(--gold);box-shadow:0 0 14px #ffd47955}
-.event-icon{font-size:2.5rem}.event-title{font-size:1.7rem;font-weight:850;letter-spacing:-.03em;margin:7px 0}.event-tag{display:inline-block;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);font-weight:800}.event-desc{line-height:1.6;color:#d9e0ef}.choices{display:grid;gap:9px;margin-top:18px}.btn{border:0;border-radius:12px;padding:13px 15px;font-weight:800;font-size:.95rem;cursor:pointer;transition:transform .15s,filter .15s;text-align:left}.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}.primary{background:var(--lime);color:#17200b}.secondary{background:#303a51;color:var(--ink);border:1px solid #46516c}.danger{background:#512b3a;color:#ffdce4;border:1px solid #784254}.gold{background:#4b4129;color:#ffe6a6;border:1px solid #78663b}.rollrow{display:flex;gap:10px;align-items:center;margin-top:14px}.dice{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:#2c354a;border:1px solid #4b5772;font-size:1.6rem;font-weight:900}.log{display:flex;flex-direction:column;gap:10px;max-height:340px;overflow:auto;margin-top:14px}.logitem{padding:12px;border-radius:12px;background:#131a28;border:1px solid #2b3449;font-size:.88rem;line-height:1.45}.logitem b{display:block;margin-bottom:4px}.lesson{margin-top:14px;background:#24301e;border:1px solid #53683a;border-radius:13px;padding:13px;color:#e4f6ca;line-height:1.5}.footer{color:var(--muted);font-size:.78rem;margin:18px 0 5px;line-height:1.5}.actions{display:flex;gap:8px;flex-wrap:wrap}.smallbtn{font-size:.82rem;padding:9px 11px}.hidden{display:none}.end{text-align:center;padding:25px 5px}.end .score{font-size:3rem;color:var(--lime);font-weight:950}.meter{height:8px;background:#30394d;border-radius:9px;overflow:hidden;margin-top:9px}.meter span{display:block;height:100%;background:var(--lime);width:0%}
-@media(max-width:760px){.wrap{padding:16px}.stats{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.stagebar{gap:4px}.stat,.card{padding:14px}.event-title{font-size:1.5rem}}
+
+/* ===== FINANCIAL CHAOS BOARD ===== */
+
+#financial-board-game {
+  --fb-bg: #f8f4e9;
+  --fb-ink: #172746;
+  --fb-green: #187f70;
+  --fb-yellow: #f3bb3f;
+  --fb-pink: #ee7286;
+  --fb-purple: #9272ce;
+  --fb-blue: #4c91d7;
+  --fb-border: #e5ddcc;
+
+  background: var(--fb-bg);
+  color: var(--fb-ink);
+  padding: clamp(18px, 4vw, 45px);
+  border-radius: 26px;
+  font-family: inherit;
+  overflow: hidden;
+}
+
+#financial-board-game * {
+  box-sizing: border-box;
+}
+
+.board-heading {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.board-heading > span,
+.board-track-header,
+.board-event-tag {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--fb-green);
+}
+
+.board-heading h2 {
+  font-size: clamp(32px, 5vw, 55px);
+  letter-spacing: -2px;
+  margin: 10px 0;
+}
+
+.board-heading h2 em {
+  color: #e5a526;
+  font-style: normal;
+}
+
+.board-heading p {
+  color: #69758a;
+  line-height: 1.6;
+}
+
+/* Dashboard */
+
+.board-dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.board-stat {
+  background: white;
+  border: 1px solid var(--fb-border);
+  border-radius: 15px;
+  padding: 15px;
+  min-width: 0;
+}
+
+.board-stat small {
+  display: block;
+  color: #748096;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.board-stat strong {
+  font-size: clamp(15px, 2vw, 23px);
+  overflow-wrap: anywhere;
+}
+
+/* Main layout */
+
+.board-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.75fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.board-track-panel,
+.board-event-panel {
+  background: white;
+  border: 1px solid var(--fb-border);
+  border-radius: 20px;
+  padding: 17px;
+  min-width: 0;
+}
+
+.board-track-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+/* Winding track: six columns, six rows */
+
+.life-board {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(67px, auto));
+  gap: 5px;
+  position: relative;
+}
+
+.board-space {
+  border: 2px solid #ffffff;
+  border-radius: 11px;
+  padding: 6px 3px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-width: 0;
+  min-height: 67px;
+  color: white;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.board-space .space-icon {
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.board-space .space-name {
+  font-size: 9px;
+  line-height: 1.2;
+  font-weight: 850;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+}
+
+.board-space .space-number {
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  font-size: 8px;
+  opacity: 0.85;
+}
+
+.space-green { background: #268c79; }
+.space-yellow { background: #e8af2e; color: #30240c; }
+.space-pink { background: #e96e83; }
+.space-purple { background: #8c70c3; }
+.space-blue { background: #4889ca; }
+.space-orange { background: #e7864b; }
+
+.board-space.active-space {
+  outline: 3px solid var(--fb-ink);
+  outline-offset: 1px;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px #17274625;
+}
+
+.board-space.player-here::after {
+  content: "YOU";
+  position: absolute;
+  bottom: -5px;
+  right: -2px;
+  background: #172746;
+  color: white;
+  border: 2px solid white;
+  border-radius: 20px;
+  padding: 2px 5px;
+  font-size: 8px;
+  font-weight: 900;
+  z-index: 2;
+}
+
+.board-space.stage-space {
+  border: 3px solid #172746;
+}
+
+.board-space.start-space,
+.board-space.finish-space {
+  background: #172746;
+  color: white;
+}
+
+.board-space.current-stage {
+  box-shadow: inset 0 0 0 3px #f3bb3f;
+}
+
+/* Track legend */
+
+.board-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  padding-top: 15px;
+  color: #647087;
+  font-size: 11px;
+}
+
+/* Event panel */
+
+.board-event-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.board-dice {
+  background: #edf5e5;
+  width: 65px;
+  height: 65px;
+  border-radius: 17px;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  margin-bottom: 17px;
+}
+
+.board-event-tag {
+  font-size: 10px;
+}
+
+.board-event-panel h3 {
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.15;
+  margin: 9px 0;
+  letter-spacing: -0.7px;
+}
+
+.board-event-panel > p {
+  color: #66738a;
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 4px 0 15px;
+}
+
+.board-choices {
+  display: grid;
+  width: 100%;
+  gap: 9px;
+}
+
+.board-button,
+.board-choice,
+.board-restart {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 13px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+  transition: transform 0.15s, filter 0.15s;
+}
+
+.board-button:hover,
+.board-choice:hover,
+.board-restart:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+}
+
+.board-button {
+  background: var(--fb-green);
+  color: white;
+  margin-top: 12px;
+}
+
+.board-choice {
+  text-align: left;
+  background: #f1f4f8;
+  border: 1px solid #e0e6ef;
+  color: var(--fb-ink);
+  line-height: 1.45;
+}
+
+.board-choice small {
+  display: block;
+  color: #68758a;
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 5px;
+}
+
+.board-lesson {
+  width: 100%;
+  background: #f0f5e6;
+  color: #38542b;
+  padding: 13px;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 15px;
+}
+
+.board-mini-heading {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  margin-top: 20px;
+}
+
+.board-log {
+  width: 100%;
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  max-height: 190px;
+  overflow-y: auto;
+}
+
+.board-log p,
+.board-log-entry {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #66738a;
+  margin: 0;
+}
+
+.board-log-entry {
+  background: #f7f8fa;
+  padding: 10px;
+  border-radius: 9px;
+}
+
+.board-log-entry strong {
+  display: block;
+  color: var(--fb-ink);
+  margin-bottom: 3px;
+}
+
+/* Finish area */
+
+.board-footer {
+  text-align: center;
+  padding-top: 27px;
+}
+
+.board-footer strong {
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.board-footer p {
+  color: #69758a;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.board-restart {
+  max-width: 220px;
+  background: #172746;
+  color: white;
+  margin-top: 8px;
+}
+
+@media (max-width: 800px) {
+  .board-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  #financial-board-game {
+    padding: 12px;
+    border-radius: 17px;
+  }
+
+  .board-dashboard {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .board-stat {
+    padding: 11px;
+  }
+
+  .board-track-panel,
+  .board-event-panel {
+    padding: 11px;
+  }
+
+  .life-board {
+    grid-template-rows: repeat(6, minmax(55px, auto));
+    gap: 3px;
+  }
+
+  .board-space {
+    min-height: 55px;
+    padding: 4px 1px;
+    border-radius: 7px;
+  }
+
+  .board-space .space-icon {
+    font-size: 16px;
+  }
+
+  .board-space .space-name {
+    font-size: 7px;
+  }
+
+  .board-space .space-number {
+    font-size: 7px;
+    top: 2px;
+    left: 3px;
+  }
+}
+
+
+
+/* High-contrast board and visible player marker */
+#financial-board-game .board-space { min-height: 76px; border-width: 2px; box-shadow: 0 2px 5px #17274624; }
+#financial-board-game .board-space .space-icon { font-size: clamp(19px, 2.2vw, 28px); }
+#financial-board-game .board-space .space-name { font-size: clamp(9px, 1vw, 12px); color: inherit; }
+#financial-board-game .board-space.active-space { outline: 4px solid #ff2868; outline-offset: 1px; transform: scale(1.04); box-shadow: 0 0 0 5px #ff286840, 0 7px 16px #17274645; z-index: 5; }
+#financial-board-game .board-space.player-here::after { content: "🧍 YOU"; right: -5px; bottom: -7px; padding: 4px 6px; font-size: 10px; background: #ff2868; border: 2px solid white; box-shadow: 0 2px 8px #17274645; }
+#financial-board-game .board-space.start-space, #financial-board-game .board-space.finish-space { background: #172746; color: #fff; }
+#financial-board-game .board-space.space-yellow { color: #30240c; }
+#financial-board-game .board-space.space-green { background: #21866d; }
+#financial-board-game .board-space.space-blue { background: #347bbd; }
+#financial-board-game .board-space.space-purple { background: #7655b2; }
+#financial-board-game .board-space.space-pink { background: #d94f70; }
+#financial-board-game .board-space.space-orange { background: #c9652c; }
+#financial-board-game .board-space.space-yellow { background: #f4c44e; }
+#financial-board-game .board-button:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+@media (max-width: 500px) { #financial-board-game .board-space { min-height: 58px; } #financial-board-game .board-space .space-icon { font-size: 17px; } #financial-board-game .board-space .space-name { font-size: 7px; } #financial-board-game .board-space.active-space { transform: scale(1.02); } }
+
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top"><div class="brand">✳ FINANCIAL CHAOS / LIFE SIMULATOR</div><div class="pill" id="roundPill">ROUND 1 OF 9 · 8 ACTIONS EACH</div></div>
-  <h1>Your life.<br><span>Your money.</span><br>Zero guarantees.</h1>
-  <p class="intro">Make choices, take risks, and survive the curveballs. Your goal is to reach retirement with a healthy net worth—not just a big salary. Every round gives you <b>8 actions</b>, and surprise events can happen at any time.</p>
+<!-- FINANCIAL CHAOS BOARD GAME -->
+<section id="financial-board-game">
 
-  <div class="stats">
-    <div class="stat"><small>💵 Cash & savings</small><strong id="cash">₹50,000</strong></div>
-    <div class="stat"><small>📈 Investments</small><strong id="invest">₹10,000</strong></div>
-    <div class="stat"><small>🧾 Debt remaining</small><strong id="debt">₹0</strong></div>
-    <div class="stat"><small>🛡️ Financial health</small><strong id="health">70 / 100</strong><div class="meter"><span id="healthbar"></span></div></div>
+  <div class="board-heading">
+    <span>THE GAME OF LIFE & MONEY</span>
+    <h2>Financial <em>Chaos</em></h2>
+    <p>Make choices. Face surprises. Build your future.</p>
   </div>
 
-  <div class="stagebar" id="stagebar"></div>
-  <div class="layout">
-    <section class="card" id="gameCard">
-      <div class="event-tag" id="phase">ROUND 1 · CAREER START</div>
-      <div class="event-icon" id="eventIcon">🎲</div>
-      <div class="event-title" id="eventTitle">Ready to roll?</div>
-      <p class="event-desc" id="eventDesc">Every round gives you eight actions. Roll the dice to trigger a life event, then decide what to do. Random surprises may change the outcome.</p>
-      <div class="rollrow"><div class="dice" id="dice">?</div><button class="btn primary" id="rollBtn" onclick="roll()">🎲 Roll for an event</button></div>
-      <div class="choices" id="choices"></div>
-      <div class="lesson hidden" id="lesson"></div>
-      <p class="footer" id="actionCount">Actions left this round: 8</p>
-    </section>
-    <aside class="card">
-      <h2>📊 Your financial story</h2>
-      <p class="sub">Track the consequences. A high income is useful, but savings, manageable debt, protection, and time matter too.</p>
-      <div class="actions"><button class="btn secondary smallbtn" onclick="showGuide()">What am I learning?</button><button class="btn secondary smallbtn" onclick="restart()">Restart game</button></div>
-      <div class="log" id="log"><div class="logitem"><b>Welcome to the game</b>Your starting life has ₹50,000 in cash and ₹10,000 invested. Try to build a safety net before taking big risks.</div></div>
-    </aside>
+  <div class="board-dashboard">
+    <div class="board-stat">
+      <small>💵 CASH</small>
+      <strong id="boardCash">₹50,000</strong>
+    </div>
+    <div class="board-stat">
+      <small>📈 INVESTMENTS</small>
+      <strong id="boardInvest">₹10,000</strong>
+    </div>
+    <div class="board-stat">
+      <small>🧾 DEBT</small>
+      <strong id="boardDebt">₹0</strong>
+    </div>
+    <div class="board-stat">
+      <small>🎲 ACTIONS LEFT</small>
+      <strong id="boardActions">8</strong>
+    </div>
   </div>
-  <p class="footer">Educational game only. Amounts and outcomes are fictional, simplified, and not personal financial advice. Tax and investment rules vary by situation.</p>
-</div>
+
+  <div class="board-layout">
+
+    <div class="board-track-panel">
+      <div class="board-track-header">
+        <span id="boardRound">ROUND 1 OF 9</span>
+        <span id="boardStage">CAREER START</span>
+      </div>
+
+      <div id="lifeBoard" class="life-board">
+        <!-- JavaScript generates the playable board spaces here -->
+      </div>
+
+      <div class="board-legend">
+        <span>🎲 Random event</span>
+        <span>💰 Money change</span>
+        <span>❓ Decision</span>
+        <span>⭐ Special event</span>
+      </div>
+    </div>
+
+    <div class="board-event-panel">
+      <div class="board-dice" id="boardDice">🎲</div>
+      <div class="board-event-tag" id="boardEventTag">YOUR NEXT MOVE</div>
+      <h3 id="boardEventTitle">Ready to roll?</h3>
+      <p id="boardEventDescription">
+        Roll the dice to discover your next financial challenge.
+      </p>
+
+      <div id="boardChoices" class="board-choices"></div>
+
+      <button id="boardRollButton" class="board-button">
+        🎲 Roll the dice
+      </button>
+
+      <div id="boardLesson" class="board-lesson">
+        💡 Your goal is to build wealth without letting unexpected
+        expenses destroy your financial plan.
+      </div>
+
+      <div class="board-mini-heading">RECENT EVENTS</div>
+      <div id="boardLog" class="board-log">
+        <p>Your financial journey begins here.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="board-footer">
+    <strong>THE FINISH LINE: RETIREMENT</strong>
+    <p>It's not about earning the most. It's about managing what you have.</p>
+    <button id="boardRestartButton" class="board-restart">
+      ↻ Start a new life
+    </button>
+  </div>
+
+</section>
+
+
 <script>
-const stages=[
- {name:"Career starts",tag:"SALARY + FIRST CHOICES",icon:"💼"},
- {name:"Love & life",tag:"MARRIAGE + SHARED COSTS",icon:"💍"},
- {name:"Big commitments",tag:"EMI + DEBT",icon:"🏠"},
- {name:"Protect yourself",tag:"INSURANCE + SAFETY NET",icon:"🛡️"},
- {name:"Chaos happens",tag:"EMERGENCIES + BAD LUCK",icon:"🌪️"},
- {name:"Make money work",tag:"INVESTMENTS + RISK",icon:"📈"},
- {name:"Tax season",tag:"TAX SAVING + PLANNING",icon:"🧾"},
- {name:"Curveball years",tag:"RANDOM LIFE EVENTS",icon:"🎲"},
- {name:"Retirement",tag:"RETIREMENT + FINAL AUDIT",icon:"🌅"}
+/* FINANCIAL CHAOS — one consistent game engine */
+const boardStages = [
+  { name: "Career Start", icon: "💼", color: "green" },
+  { name: "Salary", icon: "💰", color: "yellow" },
+  { name: "Marriage", icon: "💍", color: "pink" },
+  { name: "EMI", icon: "🏠", color: "purple" },
+  { name: "Insurance", icon: "🛡️", color: "blue" },
+  { name: "Emergency", icon: "🚑", color: "orange" },
+  { name: "Investment", icon: "📈", color: "green" },
+  { name: "Tax Saving", icon: "🧾", color: "purple" },
+  { name: "Retirement", icon: "🌅", color: "green" }
 ];
-let s, pending=null;
-const money=n=>"₹"+Math.round(n).toLocaleString("en-IN");
-const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
-const pick=a=>a[Math.floor(Math.random()*a.length)];
-function restart(){
- s={round:0,actions:8,cash:50000,invest:10000,debt:0,health:70,insurance:false,emergencyFund:false,married:false,retired:false,totalIncome:0,totalSpent:0,events:0,history:[],done:false};
- pending=null;document.getElementById("log").innerHTML="";addLog("Fresh start","You begin with ₹50,000 cash and ₹10,000 invested. Build resilience before chasing returns.");render();nextRound();
-}
-function addLog(title,msg){let d=document.createElement("div");d.className="logitem";d.innerHTML="<b>"+title+"</b>"+msg;document.getElementById("log").prepend(d)}
-function render(){
- document.getElementById("cash").textContent=money(s.cash);
- document.getElementById("invest").textContent=money(s.invest);
- document.getElementById("debt").textContent=money(s.debt);
- document.getElementById("health").textContent=Math.round(s.health)+" / 100";
- document.getElementById("healthbar").style.width=Math.max(0,Math.min(100,s.health))+"%";
- document.getElementById("roundPill").textContent=s.done?"GAME COMPLETE":"ROUND "+(s.round+1)+" OF 9 · 8 ACTIONS EACH";
- document.getElementById("actionCount").textContent=s.done?"All rounds complete.":`Actions left this round: ${s.actions}`;
- document.getElementById("stagebar").innerHTML=stages.map((x,i)=>`<div class="stage ${i<s.round?"done":i===s.round&&!s.done?"now":""}" title="${x.name}"></div>`).join("");
-}
-function nextRound(){
- if(s.round>=9){finish();return}
- s.actions=8;
- document.getElementById("phase").textContent=`ROUND ${s.round+1} · ${stages[s.round].tag}`;
- document.getElementById("eventIcon").textContent=stages[s.round].icon;
- document.getElementById("eventTitle").textContent=stages[s.round].name;
- document.getElementById("eventDesc").textContent="Eight actions are available in this stage. Roll the dice to face a planned life event or an unpredictable twist.";
- document.getElementById("dice").textContent="?";
- document.getElementById("choices").innerHTML="";
- document.getElementById("lesson").classList.add("hidden");
- document.getElementById("rollBtn").disabled=false;
- render();
-}
-const events=[
- {icon:"💼",title:"A salary offer arrives",desc:"A new role offers better pay, but it may come with extra costs and pressure.",lesson:"A raise only improves your finances if your spending doesn't rise just as fast.",choices:[
- ["Take the stable job","Your cash increases by ₹18,000.",()=>gain(18000), "Budget around take-home pay, not the headline salary."],
- ["Take the risky high-pay role","Roll a bonus or a setback.",()=>{let r=rand(1,6);if(r>=4)gain(35000);else{gain(8000);s.health-=5}return r>=4?"The role pays off: +₹35,000.":"The role starts slowly: +₹8,000 and stress rises."},"Higher potential reward usually comes with uncertainty."],
- ["Negotiate and upskill","Spend ₹4,000 now; gain a random future-ready boost.",()=>{spend(4000);gain(rand(9000,22000))},"Learning and negotiation can improve earning power over time."]
- ]},
- {icon:"💍",title:"Marriage or a major celebration",desc:"A big life event is coming. You can spend now, plan carefully, or split the cost.",lesson:"Planning for irregular costs helps stop one celebration from becoming long-term debt.",choices:[
- ["Go all out","Spend ₹25,000.",()=>spend(25000),"Enjoyment matters—but plan for it before the event."],
- ["Set a budget together","Spend ₹9,000; protect some savings.",()=>{spend(9000);s.married=true;gain(rand(0,7000))},"Shared goals and honest money conversations reduce conflict."],
- ["Delay and save first","Gain ₹2,000 from a short-term saving challenge.",()=>gain(2000),"Delaying a purchase can be a strategy, not a failure."]
- ]},
- {icon:"🏠",title:"The EMI temptation",desc:"A shiny purchase is available on monthly instalments. The down payment looks manageable.",lesson:"EMIs make purchases feel smaller. Add all monthly obligations before committing.",choices:[
- ["Take the large EMI","Get the item, but add ₹45,000 debt.",()=>{s.debt+=45000;spend(10000);s.health-=4},"Debt reduces future flexibility; interest makes the final price higher."],
- ["Choose a cheaper option","Spend ₹8,000, no new debt.",()=>spend(8000),"Affordability is about the whole cost, not just the monthly payment."],
- ["Wait and save","Gain ₹3,000 from avoiding impulse spending.",()=>gain(3000),"Waiting gives you time to compare price and need."]
- ]},
- {icon:"🛡️",title:"Insurance check-up",desc:"You can pay for protection now—or gamble that nothing goes wrong.",lesson:"Insurance is for losses you couldn't comfortably pay yourself. Read exclusions and coverage.",choices:[
- ["Buy basic protection","Pay ₹6,000; future covered emergencies are reduced.",()=>{spend(6000);s.insurance=true},"Insurance transfers some large risks for a known premium."],
- ["Skip it","Keep your cash for now.",()=>{s.health-=3;gain(2500)},"Saving the premium is not the same as being protected."],
- ["Compare policies first","Spend ₹1,000 and improve your financial health.",()=>{spend(1000);s.health+=5;s.insurance=true},"Compare coverage, exclusions, waiting periods, and claim rules—not price alone."]
- ]},
- {icon:"🚑",title:"A surprise bill!",desc:"A medical, repair, or family emergency lands without warning.",lesson:"An emergency fund keeps unexpected bills from forcing expensive borrowing or selling investments at a bad time.",choices:[
- ["Pay from cash","Pay a random bill.",()=>spend(rand(7000,22000)),"Cash is useful because emergencies often need money immediately."],
- ["Borrow to cover it","Add debt and pay a smaller fee now.",()=>{s.debt+=rand(10000,24000);spend(2000);s.health-=8},"Borrowing can solve today's problem while creating tomorrow's payments."],
- ["Use your safety net","If you have a fund, pay less; otherwise pay more.",()=>{if(s.emergencyFund)spend(rand(3000,8000));else spend(rand(12000,24000))},"A useful starter goal is several months of essential expenses, adjusted to your situation."]
- ]},
- {icon:"📈",title:"Investment opportunity",desc:"A friend claims a hot investment could double. The outcome is not guaranteed.",lesson:"Diversification and time horizon matter. Never invest emergency money in a risky asset.",choices:[
- ["Put ₹10,000 into a risky bet","Could boom, break even, or crash.",()=>{spend(10000);let r=rand(1,6);if(r<=2){s.invest+=2000;s.health-=8;return "Market crash: most of the bet is lost."}if(r<=4){s.invest+=10000;return "No big move: your investment roughly holds value."}s.invest+=rand(18000,30000);return "A lucky boom! Your investment jumps."},"High potential returns come with a real possibility of loss."],
- ["Invest steadily","Move ₹5,000 from cash into diversified investments.",()=>{spend(5000);s.invest+=5000+rand(0,1800)},"Diversification can reduce concentration risk, though it cannot remove all risk."],
- ["Keep cash for now","Add ₹1,000 to your buffer.",()=>gain(1000),"Cash can be appropriate for near-term needs, even if it may lose purchasing power to inflation."]
- ]},
- {icon:"🧾",title:"Tax-saving season",desc:"You can plan early, rush into a product, or ignore the deadline.",lesson:"Tax benefits depend on current rules and eligibility. Don't buy something unsuitable only for a deduction.",choices:[
- ["Plan eligible deductions","Spend ₹4,000 on a suitable eligible plan; get a simulated tax benefit.",()=>{spend(4000);gain(7000);s.health+=4},"Tax planning should fit your goals, liquidity needs, and the rules that apply to you."],
- ["Buy a random tax product","Pay a fee; outcome is uncertain.",()=>{spend(7000);if(Math.random()<.45)gain(9000);else s.health-=5},"A tax label does not make a product automatically good."],
- ["Review documents and wait","Gain ₹1,500 by avoiding a rushed mistake.",()=>gain(1500),"Keep records and check eligibility early rather than making last-minute decisions."]
- ]},
- {icon:"🧰",title:"A side hustle appears",desc:"A friend offers a side business. It might become income—or eat your weekends and savings.",lesson:"Test an idea cheaply before making a large commitment. Keep a record of costs and actual profit.",choices:[
- ["Launch big","Spend ₹12,000; high-variance result.",()=>{spend(12000);let r=rand(1,6);if(r<=2){s.health-=8;return "It flops. You lose the setup cost."}gain(r*3500);return "Customers arrive! Your experiment earns money."},"Small experiments limit downside while you learn."],
- ["Run a tiny test","Spend ₹3,000 and earn a modest random return.",()=>{spend(3000);gain(rand(2500,9000))},"Measure profit after expenses, not just revenue."],
- ["Decline politely","Protect your time and gain ₹1,000.",()=>gain(1000),"Not every opportunity fits your goals or capacity."]
- ]},
- {icon:"🌪️",title:"The chaos card",desc:"The dice decide what kind of surprise hits: lucky break, inflation, a scam attempt, or a sudden expense.",lesson:"A resilient plan expects uncertainty. Verify financial claims and avoid rushed transfers.",choices:[
- ["Roll with it","Let chance decide your outcome.",()=>{let r=rand(1,8);if(r===1){spend(18000);return "Repair emergency: −₹18,000."}if(r===2){s.debt+=12000;return "A costly delay adds ₹12,000 debt."}if(r===3){gain(22000);return "Unexpected bonus: +₹22,000!"}if(r===4){s.invest=Math.max(0,s.invest-12000);return "Market drop: investments fall by ₹12,000."}if(r===5){gain(10000);return "Family gift: +₹10,000."}if(r===6){spend(5000);s.health+=3;return "Inflation squeezes your budget: −₹5,000."}if(r===7){gain(15000);return "Refund arrives: +₹15,000."}s.health-=12;return "Scam attempt! You avoided most of it, but lose time and confidence."},"If an offer pressures you to act immediately, pause and verify it independently."],
- ["Prepare for the next surprise","Spend ₹5,000 to establish an emergency fund.",()=>{spend(5000);s.emergencyFund=true;s.health+=8},"Preparation turns a crisis into an inconvenience."],
- ["Pay down debt","Use cash to reduce debt if you have any.",()=>{let p=Math.min(s.cash, s.debt,15000);s.cash-=p;s.debt-=p;if(p===0)gain(1000);return p?`Paid off ${money(p)} of debt.`:"No debt to repay; you saved ₹1,000."},"Paying down expensive debt can be a strong, relatively certain use of cash."]
- ]},
- {icon:"🌅",title:"Retirement planning",desc:"Your future self is asking: did you build assets, protect against shocks, and keep debt under control?",lesson:"Retirement readiness depends on spending, years remaining, inflation, investment risk, and reliable income—not one magic number.",choices:[
- ["Boost long-term investments","Move ₹8,000 from cash to investments and simulate growth.",()=>{spend(8000);let growth=rand(-3000,10000);s.invest=Math.max(0,s.invest+8000+growth);s.retired=true},"Long horizons can help compounding, but returns are never guaranteed."],
- ["Protect your runway","Pay down debt and build your cash buffer.",()=>{let p=Math.min(s.cash,s.debt);s.cash-=p;s.debt-=p;s.emergencyFund=true;s.health+=8;s.retired=true},"Low debt and accessible reserves can make retirement more resilient."],
- ["Enjoy a planned treat","Spend ₹6,000 without borrowing.",()=>{spend(6000);s.retired=true},"A plan should support a life you enjoy, not just maximise a number."]
- ]}
+
+const boardSymbols = [
+  { icon: "🎲", name: "Random Event", color: "blue" },
+  { icon: "💰", name: "Money Change", color: "yellow" },
+  { icon: "❓", name: "Decision", color: "purple" },
+  { icon: "⭐", name: "Special Event", color: "pink" },
+  { icon: "🎲", name: "Surprise", color: "orange" },
+  { icon: "💸", name: "Expense", color: "green" }
 ];
-function roll(){
- if(s.done||pending||s.actions<=0)return;
- const die=rand(1,6);document.getElementById("dice").textContent=die;
- s.events++;
- // Stage-matched events, with a chance of a wild card from anywhere.
- let e;
- if(Math.random()<.34)e=events[8];
- else if(s.round===0)e=events[0];
- else if(s.round===1)e=events[1];
- else if(s.round===2)e=events[2];
- else if(s.round===3)e=events[3];
- else if(s.round===4)e=events[4];
- else if(s.round===5)e=events[5];
- else if(s.round===6)e=events[6];
- else if(s.round===7)e=events[7];
- else e=events[9];
- // Some rounds may get a surprise unrelated to their stage.
- if(Math.random()<.18)e=pick(events);
- pending=e;
- showEvent(e,die);
+
+const boardState = {};
+const money = value => "₹" + Math.round(value).toLocaleString("en-IN");
+const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const pick = items => items[Math.floor(Math.random() * items.length)];
+const dieFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+
+const boardSpaces = Array.from({ length: 36 }, (_, i) => {
+  const stageIndex = Math.min(8, Math.floor(i / 4));
+  const symbol = boardSymbols[i % boardSymbols.length];
+  const isStage = i % 4 === 3 && i !== 35;
+  return {
+    id: i,
+    stage: stageIndex,
+    icon: i === 0 ? "🚀" : i === 35 ? "🏁" : isStage ? boardStages[stageIndex].icon : symbol.icon,
+    name: i === 0 ? "START" : i === 35 ? "FINISH" : isStage ? boardStages[stageIndex].name : symbol.name,
+    color: i === 0 || i === 35 ? "green" : isStage ? boardStages[stageIndex].color : symbol.color,
+    special: isStage || i === 0 || i === 35
+  };
+});
+
+const boardEvents = [
+  {
+    title: "Unexpected salary bonus!", icon: "💸",
+    description: "Your company announces a surprise performance bonus.",
+    lesson: "A bonus is an opportunity to save, repay debt, or invest—not a reason to increase every expense.",
+    choices: [
+      { label: "Save the bonus", detail: "Receive ₹15,000.", action: () => { boardState.cash += 15000; return "You saved ₹15,000."; } },
+      { label: "Celebrate", detail: "Enjoy yourself, but spend more than the bonus.", action: () => { boardState.cash -= 3000; return "Your celebration cost ₹3,000 net."; } },
+      { label: "Invest some of it", detail: "Move ₹10,000 into investments.", action: () => { if (boardState.cash < 10000) return "Not enough cash to invest ₹10,000."; boardState.cash -= 10000; boardState.invest += 10000; return "You moved ₹10,000 into investments."; } }
+    ]
+  },
+  {
+    title: "The medical emergency", icon: "🚑",
+    description: "A sudden medical bill arrives. Your savings are about to be tested.",
+    lesson: "Emergency savings can reduce the need to borrow or sell long-term investments at a bad time.",
+    choices: [
+      { label: "Use emergency savings", detail: `Pay ${money(boardState.emergencyFund ? 6000 : 16000)}.`, action: () => { const cost = boardState.emergencyFund ? 6000 : 16000; boardState.cash -= cost; return `Medical expenses cost ${money(cost)}.`; } },
+      { label: "Borrow the money", detail: "Add ₹12,000 debt and pay ₹2,000 upfront.", action: () => { boardState.debt += 12000; boardState.cash -= 2000; return "You borrowed ₹12,000 and paid ₹2,000 upfront."; } },
+      { label: "Use insurance", detail: "Insurance reduces the simulated bill if purchased.", action: () => { const cost = boardState.insurance ? 3000 : 14000; boardState.cash -= cost; return `Your out-of-pocket cost is ${money(cost)}.`; } }
+    ]
+  },
+  {
+    title: "Market goes wild!", icon: "📈",
+    description: "Your investments suddenly move. Will the market boom or crash?",
+    lesson: "Diversification can reduce concentration risk, but investment returns are never guaranteed.",
+    choices: [
+      { label: "Hold your investments", detail: "Accept a random market movement.", action: () => { const change = rand(-10000, 16000); boardState.invest = Math.max(0, boardState.invest + change); return change >= 0 ? `Your portfolio gained ${money(change)}.` : `Your portfolio lost ${money(-change)}.`; } },
+      { label: "Invest ₹5,000 more", detail: "Only if you have enough cash; market result is random.", action: () => { if (boardState.cash < 5000) return "Insufficient cash. You avoided an unaffordable investment."; boardState.cash -= 5000; const change = rand(-4000, 7000); boardState.invest = Math.max(0, boardState.invest + 5000 + change); return `Your additional investment had a market change of ${money(change)}.`; } },
+      { label: "Keep your cash", detail: "Receive ₹1,000 from a savings challenge.", action: () => { boardState.cash += 1000; return "You kept cash accessible and saved ₹1,000."; } }
+    ]
+  },
+  {
+    title: "An unexpected inheritance!", icon: "🎁",
+    description: "A distant relative leaves you a small unexpected financial gift.",
+    lesson: "Windfalls can improve your position when you use them deliberately.",
+    choices: [
+      { label: "Build an emergency fund", detail: "Receive ₹12,000 and establish a reserve.", action: () => { boardState.cash += 12000; boardState.emergencyFund = true; return "You received ₹12,000 and established an emergency fund."; } },
+      { label: "Pay down debt", detail: "Receive ₹12,000 and repay existing debt.", action: () => { boardState.cash += 12000; const payment = Math.min(12000, boardState.debt); boardState.cash -= payment; boardState.debt -= payment; return `You received ₹12,000 and repaid ${money(payment)} of debt.`; } },
+      { label: "Enjoy the windfall", detail: "Receive ₹12,000 and spend ₹7,000.", action: () => { boardState.cash += 5000; return "You enjoyed ₹7,000 and kept ₹5,000."; } }
+    ]
+  },
+  {
+    title: "Your EMI is getting expensive", icon: "🏠",
+    description: "Your monthly obligations are squeezing your budget.",
+    lesson: "A loan's true cost includes interest, fees, repayment length, and lost flexibility.",
+    choices: [
+      { label: "Repay some debt", detail: "Pay up to ₹8,000 toward debt.", action: () => { const payment = Math.min(8000, Math.max(0, boardState.cash), boardState.debt); boardState.cash -= payment; boardState.debt -= payment; return `You repaid ${money(payment)}.`; } },
+      { label: "Take another loan", detail: "Receive ₹10,000 cash but add ₹15,000 debt.", action: () => { boardState.cash += 10000; boardState.debt += 15000; return "You received ₹10,000 but added ₹15,000 debt."; } },
+      { label: "Avoid a new commitment", detail: "Save ₹2,000 by delaying a purchase.", action: () => { boardState.cash += 2000; return "You avoided a purchase and kept ₹2,000."; } }
+    ]
+  },
+  {
+    title: "Tax-saving deadline!", icon: "🧾",
+    description: "The deadline is approaching. Plan carefully or risk a rushed decision.",
+    lesson: "Tax benefits depend on eligibility and current law. Never buy an unsuitable product just for a deduction.",
+    choices: [
+      { label: "Make an eligible plan", detail: "Simulated net cash benefit of ₹2,000.", action: () => { if (boardState.cash < 4000) { boardState.cash += 500; return "You did not have enough cash for the plan, so you kept your money and reviewed options."; } boardState.cash += 2000; return "After simulated costs and benefits, your cash rose by ₹2,000."; } },
+      { label: "Rush into a product", detail: "A random result may help or hurt.", action: () => { const change = rand(-8000, 7000); boardState.cash += change; return `Your rushed decision changed cash by ${money(change)}.`; } },
+      { label: "Review finances first", detail: "Receive ₹1,000 from avoiding a rushed mistake.", action: () => { boardState.cash += 1000; return "You reviewed your options and saved ₹1,000."; } }
+    ]
+  },
+  {
+    title: "Inflation strikes!", icon: "🛒",
+    description: "Food, transport, and everyday essentials become more expensive.",
+    lesson: "Inflation reduces purchasing power. A plan should account for rising costs over time.",
+    choices: [
+      { label: "Adjust your budget", detail: "Pay ₹2,000 and protect your buffer.", action: () => { boardState.cash -= 2000; return "You adjusted your budget and paid ₹2,000."; } },
+      { label: "Ignore rising costs", detail: "Pay a random larger bill.", action: () => { const cost = rand(4000, 10000); boardState.cash -= cost; return `Higher living costs consumed ${money(cost)}.`; } },
+      { label: "Find extra income", detail: "Spend ₹1,000 to earn a random amount.", action: () => { const income = rand(3000, 9000); boardState.cash += income - 1000; return `Your side gig earned ${money(income)} before ₹1,000 in costs.`; } }
+    ]
+  },
+  {
+    title: "A surprise opportunity!", icon: "⭐",
+    description: "A new opportunity could improve your finances—or become an expensive mistake.",
+    lesson: "Check the risks, costs, and credibility of an opportunity before committing money.",
+    choices: [
+      { label: "Take a calculated risk", detail: "Pay ₹4,000; outcome is uncertain.", action: () => { if (boardState.cash < 4000) return "You lacked the cash to take this risk, so you avoided it."; boardState.cash -= 4000; const change = rand(-8000, 18000); boardState.cash += change; return `After the ₹4,000 cost, the opportunity changed your cash by ${money(change - 4000)} overall.`; } },
+      { label: "Research first", detail: "Spend time researching and gain a small reward.", action: () => { boardState.cash += 1000; return "You researched carefully and earned a simulated ₹1,000 reward."; } },
+      { label: "Skip the opportunity", detail: "Protect your existing savings.", action: () => "You avoided taking on an unfamiliar risk." }
+    ]
+  },
+  {
+    title: "A salary raise!", icon: "📈",
+    description: "Your employer offers a raise. You also have new expenses to consider.",
+    lesson: "When income rises, increasing savings alongside spending can help build long-term stability.",
+    choices: [
+      { label: "Save most of it", detail: "Gain ₹8,000 cash and invest ₹4,000.", action: () => { boardState.cash += 8000; boardState.invest += 4000; return "You saved and invested part of the raise."; } },
+      { label: "Upgrade your lifestyle", detail: "Gain ₹5,000 but spend ₹3,000.", action: () => { boardState.cash += 2000; return "You upgraded your lifestyle and kept ₹2,000 net."; } },
+      { label: "Pay off debt", detail: "Gain ₹8,000 and use it to reduce debt.", action: () => { boardState.cash += 8000; const payment = Math.min(boardState.cash, boardState.debt); boardState.cash -= payment; boardState.debt -= payment; return `You used ${money(payment)} to reduce debt.`; } }
+    ]
+  }
+];
+
+function createBoard() {
+  const board = document.getElementById("lifeBoard");
+  board.innerHTML = "";
+  boardSpaces.forEach((space, index) => {
+    const tile = document.createElement("div");
+    tile.className = `board-space space-${space.color}`;
+    tile.dataset.position = index;
+    const row = Math.floor(index / 6);
+    const col = row % 2 === 0 ? index % 6 : 5 - (index % 6);
+    tile.style.gridRow = row + 1;
+    tile.style.gridColumn = col + 1;
+    if (space.special) tile.classList.add("stage-space");
+    if (index === 0) tile.classList.add("start-space");
+    if (index === 35) tile.classList.add("finish-space");
+    tile.innerHTML = `<span class="space-number">${index + 1}</span><span class="space-icon">${space.icon}</span><span class="space-name">${space.name}</span>`;
+    board.appendChild(tile);
+  });
+  updateBoardPosition();
 }
-function showEvent(e,die){
- document.getElementById("phase").textContent=`ROUND ${s.round+1} · DIE ROLL ${die}`;
- document.getElementById("eventIcon").textContent=e.icon;
- document.getElementById("eventTitle").textContent=e.title;
- document.getElementById("eventDesc").textContent=e.desc;
- document.getElementById("rollBtn").disabled=true;
- document.getElementById("lesson").classList.add("hidden");
- document.getElementById("choices").innerHTML=e.choices.map((c,i)=>`<button class="btn ${i===0?"primary":i===1?"secondary":"gold"}" onclick="choose(${i})">${c[0]} <span style="display:block;font-size:.8rem;font-weight:500;opacity:.8;margin-top:4px">${c[1]}</span></button>`).join("");
+
+function updateBoardPosition() {
+  document.querySelectorAll("#lifeBoard .board-space").forEach(tile => {
+    const pos = Number(tile.dataset.position);
+    tile.classList.toggle("player-here", pos === boardState.position);
+    tile.classList.toggle("active-space", pos === boardState.position);
+    tile.classList.toggle("current-stage", Math.floor(pos / 4) === boardState.round);
+  });
+  document.getElementById("boardRound").textContent = boardState.finished ? "GAME COMPLETE" : `ROUND ${boardState.round + 1} OF 9`;
+  document.getElementById("boardStage").textContent = boardStages[Math.min(boardState.round, 8)].name.toUpperCase();
 }
-function choose(i){
- if(!pending)return;
- const e=pending,c=e.choices[i];let result;
- try{result=c[2]()}catch(err){result="You made a choice."}
- if(typeof result!=="string")result=c[1];
- s.actions--;s.health=Math.max(0,Math.min(100,s.health));s.cash=Math.max(-25000,s.cash);
- document.getElementById("lesson").textContent="💡 MONEY LESSON: "+c[3];document.getElementById("lesson").classList.remove("hidden");
- addLog(e.icon+" "+e.title,`${result||c[1]} <br><span style="color:#aab4ca">Lesson: ${c[3]}</span>`);
- pending=null;document.getElementById("choices").innerHTML="";
- document.getElementById("eventTitle").textContent="Choice locked in!";
- document.getElementById("eventDesc").textContent=result||c[1];
- render();
- if(s.cash<0){s.health-=8;addLog("⚠️ Cash shortfall","Your cash dipped below zero. This simulated shortfall hurts financial health; consider reducing debt and building reserves.");}
- if(s.actions<=0){
-   document.getElementById("rollBtn").textContent=s.round===8?"See final results":"Next life stage →";
-   document.getElementById("rollBtn").disabled=false;
-   document.getElementById("rollBtn").onclick=()=>{document.getElementById("rollBtn").textContent="🎲 Roll for an event";document.getElementById("rollBtn").onclick=roll;s.round++;nextRound()};
- }else{
-   document.getElementById("rollBtn").textContent="🎲 Roll next event ("+s.actions+" left)";
-   document.getElementById("rollBtn").disabled=false;document.getElementById("rollBtn").onclick=roll;
- }
+
+function updateBoardStats() {
+  document.getElementById("boardCash").textContent = money(boardState.cash);
+  document.getElementById("boardInvest").textContent = money(boardState.invest);
+  document.getElementById("boardDebt").textContent = money(boardState.debt);
+  document.getElementById("boardActions").textContent = boardState.actions;
+  updateBoardPosition();
 }
-function gain(n){s.cash+=n;s.totalIncome+=n;return `You gained ${money(n)}.`}
-function spend(n){s.cash-=n;s.totalSpent+=n;return `You spent ${money(n)}.`}
-function showGuide(){
- document.getElementById("eventIcon").textContent="🧠";
- document.getElementById("eventTitle").textContent="The money rules behind the chaos";
- document.getElementById("eventDesc").innerHTML="• <b>Cash flow:</b> track money in and out.<br>• <b>Emergency fund:</b> prepare for irregular bills.<br>• <b>Debt:</b> interest and monthly payments limit future choices.<br>• <b>Insurance:</b> protect against losses you couldn't comfortably absorb.<br>• <b>Investing:</b> risk, diversification, fees, and time horizon all matter.<br>• <b>Tax:</b> plan within current rules; don't buy unsuitable products just for a deduction.<br>• <b>Retirement:</b> balance assets, spending, health, and inflation.";
- document.getElementById("choices").innerHTML='<button class="btn primary" onclick="nextRound()">Back to game</button>';
- document.getElementById("rollBtn").disabled=true;
+
+function addBoardLog(title, message) {
+  const log = document.getElementById("boardLog");
+  const entry = document.createElement("div");
+  entry.className = "board-log-entry";
+  const strong = document.createElement("strong");
+  strong.textContent = title;
+  const span = document.createElement("span");
+  span.textContent = message;
+  entry.append(strong, span);
+  log.prepend(entry);
+  while (log.children.length > 8) log.lastElementChild.remove();
 }
-function finish(){
- s.done=true;render();
- const net=s.cash+s.invest-s.debt;
- let label=net>=150000?"Money mastermind 🏆":net>=80000?"Resilient planner 🌱":net>=0?"Still standing 🧭":"Financial plot twist 💥";
- document.getElementById("phase").textContent="FINAL AUDIT";
- document.getElementById("eventIcon").textContent="🏁";
- document.getElementById("eventTitle").textContent=label;
- document.getElementById("eventDesc").innerHTML=`You completed all 9 life stages and made ${s.events} event decisions. Your simulated net worth is <b>${money(net)}</b> (cash + investments − debt).`;
- document.getElementById("choices").innerHTML=`<div class="end"><div class="score">${money(net)}</div><p>Simulated net worth</p><p class="sub">Cash: ${money(s.cash)} · Investments: ${money(s.invest)} · Debt: ${money(s.debt)}<br>Financial health: ${Math.round(s.health)}/100 · Emergency fund: ${s.emergencyFund?"Yes":"Not built"} · Insurance: ${s.insurance?"Yes":"Not selected"}</p><button class="btn primary" onclick="restart()">Play a new unpredictable life</button></div>`;
- document.getElementById("rollBtn").classList.add("hidden");
- addLog("🏁 Final audit",`Net worth: ${money(net)}. Cash ${money(s.cash)}, investments ${money(s.invest)}, debt ${money(s.debt)}.`);
+
+function chooseEvent() {
+  const roll = Math.random();
+  if (roll < 0.22) {
+    return {
+      title: "Unexpected twist!", icon: "🎲",
+      description: "A surprise changes your financial plans. What will you do?",
+      lesson: "A buffer gives you options when life becomes unpredictable.",
+      choices: [
+        { label: "Lucky break", detail: "Gain ₹2,000–₹15,000.", action: () => { const n = rand(2000, 15000); boardState.cash += n; return `You received ${money(n)}.`; } },
+        { label: "Sudden expense", detail: "Pay ₹1,000–₹10,000.", action: () => { const n = rand(1000, 10000); boardState.cash -= n; return `You paid an unexpected ${money(n)} bill.`; } },
+        { label: "Financial gamble", detail: "Risk ₹3,000 for a chance at a larger reward.", action: () => { if (boardState.cash < 3000) return "You did not have ₹3,000 available, so you skipped the gamble."; boardState.cash -= 3000; if (Math.random() < 0.4) { const n = rand(7000, 15000); boardState.cash += n; return `You won ${money(n)} after risking ₹3,000.`; } return "The gamble failed. You lost ₹3,000."; } }
+      ]
+    };
+  }
+  return pick(boardEvents);
 }
-restart();
+
+function showBoardEvent(event, die) {
+  boardState.pending = true;
+  document.getElementById("boardDice").textContent = dieFaces[die - 1];
+  document.getElementById("boardEventTag").textContent = `DICE ROLL ${die} · ACTION ${9 - boardState.actions}/8`;
+  document.getElementById("boardEventTitle").textContent = event.title;
+  document.getElementById("boardEventDescription").textContent = event.description;
+  document.getElementById("boardLesson").textContent = "💡 MONEY LESSON: " + event.lesson;
+  const choices = document.getElementById("boardChoices");
+  choices.innerHTML = "";
+  event.choices.forEach(choice => {
+    const button = document.createElement("button");
+    button.className = "board-choice";
+    const title = document.createElement("strong");
+    title.textContent = choice.label;
+    const detail = document.createElement("small");
+    detail.textContent = choice.detail;
+    button.append(title, detail);
+    button.addEventListener("click", () => resolveBoardChoice(event, choice));
+    choices.appendChild(button);
+  });
+  document.getElementById("boardRollButton").disabled = true;
+}
+
+function rollBoardDice() {
+  if (boardState.pending || boardState.finished) return;
+  const die = rand(1, 6);
+  document.getElementById("boardDice").textContent = dieFaces[die - 1];
+
+  // The finish square is reserved for the final decision of round 9.
+  if (boardState.round === 8 && boardState.actions === 1) {
+    boardState.position = 35;
+  } else {
+    boardState.position = (boardState.position + die) % 35;
+  }
+
+  updateBoardPosition();
+  const space = boardSpaces[boardState.position];
+  addBoardLog(`Rolled ${die}`, `Moved to ${space.name}.`);
+  const event = chooseEvent();
+  showBoardEvent(event, die);
+}
+
+function resolveBoardChoice(event, choice) {
+  if (!boardState.pending || boardState.finished) return;
+  const result = choice.action();
+  boardState.actions -= 1;
+  boardState.pending = false;
+  if (boardState.cash < 0) boardState.health = Math.max(0, boardState.health - 5);
+  boardState.invest = Math.max(0, boardState.invest);
+  boardState.debt = Math.max(0, boardState.debt);
+  updateBoardStats();
+  addBoardLog(`${event.icon} ${event.title}`, result);
+  document.getElementById("boardEventDescription").textContent = result;
+  document.getElementById("boardChoices").innerHTML = "";
+
+  if (boardState.actions === 0) {
+    if (boardState.round === 8) {
+      boardState.position = 35;
+      updateBoardStats();
+      finishBoardGame();
+      return;
+    }
+    document.getElementById("boardEventTag").textContent = "ROUND COMPLETE";
+    document.getElementById("boardEventTitle").textContent = `${boardStages[boardState.round].name} complete!`;
+    document.getElementById("boardEventDescription").textContent = "You used all 8 actions. Continue to the next life stage when you're ready.";
+    document.getElementById("boardLesson").textContent = "💡 Review your cash, investments, and debt before the next stage.";
+    const button = document.getElementById("boardRollButton");
+    button.disabled = false;
+    button.textContent = "➡️ Next life stage";
+    button.onclick = nextBoardRound;
+  } else {
+    const button = document.getElementById("boardRollButton");
+    button.disabled = false;
+    button.textContent = `🎲 Roll again · ${boardState.actions} actions left`;
+    button.onclick = rollBoardDice;
+  }
+}
+
+function nextBoardRound() {
+  if (boardState.pending || boardState.finished || boardState.actions !== 0) return;
+  boardState.round += 1;
+  boardState.actions = 8;
+  updateBoardStats();
+  document.getElementById("boardEventTag").textContent = `ROUND ${boardState.round + 1} · ${boardStages[boardState.round].name.toUpperCase()}`;
+  document.getElementById("boardEventTitle").textContent = `${boardStages[boardState.round].icon} ${boardStages[boardState.round].name}`;
+  document.getElementById("boardEventDescription").textContent = "A new life stage begins. Roll the dice and see what happens.";
+  document.getElementById("boardLesson").textContent = "💡 Every stage brings new goals, costs, and opportunities.";
+  const button = document.getElementById("boardRollButton");
+  button.textContent = "🎲 Roll the dice";
+  button.disabled = false;
+  button.onclick = rollBoardDice;
+  addBoardLog("New life stage", boardStages[boardState.round].name);
+}
+
+function finishBoardGame() {
+  if (boardState.finished) return;
+  boardState.finished = true;
+  boardState.pending = false;
+  updateBoardStats();
+  document.getElementById("boardEventTag").textContent = "GAME COMPLETE";
+  document.getElementById("boardEventTitle").textContent = "🏁 Welcome to retirement!";
+  document.getElementById("boardEventDescription").textContent = `Your final net worth is ${money(boardState.cash + boardState.invest - boardState.debt)}.`;
+  document.getElementById("boardLesson").textContent = `FINAL AUDIT · Cash ${money(boardState.cash)} · Investments ${money(boardState.invest)} · Debt ${money(boardState.debt)} · Net worth ${money(boardState.cash + boardState.invest - boardState.debt)}.`;
+  document.getElementById("boardChoices").innerHTML = "";
+  const button = document.getElementById("boardRollButton");
+  button.disabled = true;
+  button.textContent = "🏁 Game finished";
+  document.getElementById("boardStage").textContent = "RETIREMENT COMPLETE";
+  addBoardLog("🏁 Retirement", `Final net worth: ${money(boardState.cash + boardState.invest - boardState.debt)}.`);
+}
+
+function restartBoardGame() {
+  Object.assign(boardState, {
+    cash: 50000, invest: 10000, debt: 0, health: 70,
+    round: 0, actions: 8, position: 0,
+    insurance: false, emergencyFund: false,
+    finished: false, pending: false
+  });
+  document.getElementById("boardLog").innerHTML = "<p>Your financial journey begins here.</p>";
+  document.getElementById("boardChoices").innerHTML = "";
+  document.getElementById("boardEventTag").textContent = "YOUR NEXT MOVE";
+  document.getElementById("boardEventTitle").textContent = "Ready to roll?";
+  document.getElementById("boardEventDescription").textContent = "Roll the dice to discover your next financial challenge.";
+  document.getElementById("boardLesson").textContent = "💡 Build wealth while preparing for unexpected expenses.";
+  document.getElementById("boardDice").textContent = "🎲";
+  const button = document.getElementById("boardRollButton");
+  button.textContent = "🎲 Roll the dice";
+  button.disabled = false;
+  button.onclick = rollBoardDice;
+  createBoard();
+  updateBoardStats();
+}
+
+function initBoardGame() {
+  Object.assign(boardState, {
+    cash: 50000, invest: 10000, debt: 0, health: 70,
+    round: 0, actions: 8, position: 0,
+    insurance: false, emergencyFund: false,
+    finished: false, pending: false
+  });
+  document.getElementById("boardRollButton").onclick = rollBoardDice;
+  document.getElementById("boardRestartButton").addEventListener("click", restartBoardGame);
+  createBoard();
+  updateBoardStats();
+}
+
+initBoardGame();
+
 </script>
 </body>
+
 </html>
 
